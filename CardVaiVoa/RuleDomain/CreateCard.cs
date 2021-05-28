@@ -9,35 +9,65 @@ namespace CardVaiVoa.RuleDomain
     {
         public string CreateCards()
         {
-            int cardNumber = 0;
             Random randonNumber = new Random();
             int numberBanc = randonNumber.Next(1000, 9999);
             string numberConvert = numberBanc.ToString();
-            int bandeiraNumber = 54;
+            int bandeiraNumber = 36;
             string bandeiraConvert = bandeiraNumber.ToString();
             int numberUserCard = randonNumber.Next(100000000, 999999999);
             string numberUserCardConvert = numberUserCard.ToString();
             string numberCard = bandeiraConvert + numberConvert + numberUserCardConvert;
-            char[] number = numberCard.ToCharArray();
-            for (int indice = 0; indice < number.Length; indice++)
-            {
-                int totalPosicaoPar = 0;
-                int totalPositionImpar = 0;
 
-                if (indice % 2 == 0)
+
+
+            int totalPositionImpar = 0;
+            int totalPositionPar = 0;
+            for (int i = 0; i < numberCard.Length; i++)
+            {
+                int integer = (int)Char.GetNumericValue(numberCard[i]);
+                if (i % 2 == 0)
                 {
-                   int numberInt = (int)number[indice];
-                    totalPosicaoPar = totalPosicaoPar + (2 * numberInt);
+                    int dobro = 2 * integer;
+                    if (dobro > 9)
+                    {
+                        int resto = dobro % 10;
+                        totalPositionPar = totalPositionPar + resto + 1;
+                    }
+                    else
+                    {
+                        totalPositionPar = totalPositionPar + dobro;
+                    }
+                    
                 }
-                else 
-                { 
-                    int numberInt = (int)number[indice];
-                    totalPositionImpar = totalPositionImpar + numberInt;
+                else
+                {
+                    totalPositionImpar = totalPositionImpar + integer;
                 }
-                numberCard = totalPosicaoPar.ToString();
+
 
             }
-            return numberCard;
+            int somaImpaPar = (totalPositionPar + totalPositionImpar);
+            int digitVerificador;
+            int restoImpaPar;
+            if (somaImpaPar < 100)
+            {
+                restoImpaPar = (somaImpaPar % 10);
+                digitVerificador = 10 - restoImpaPar;
+                if (digitVerificador == 10)
+                {
+                    digitVerificador = 0;
+                }
+
+            }
+            else
+            {
+                digitVerificador = somaImpaPar;
+            }
+
+
+
+            string verifyNumberString = digitVerificador.ToString();
+            return numberCard + verifyNumberString;
         }
     }
 }
